@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Complaints</title>
+    <style>
+        /* Add your styling here */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        .remove-btn {
+            border: none;
+            color: black;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 20px; /* Smaller font size for the icon */
+        }
+        .remove-btn:hover {
+            background-color: #d32f2f;
+        }
+        .status-btn {
+            padding: 8px 12px;
+            font-size: 14px; /* Adjust button size */
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+            background-color: transparent; /* Remove background color */
+            color: inherit; /* Ensure the color is inherited from the text */
+        }
+        .status-btn i {
+            font-size: 16px; /* Make the icon smaller */
+        }
+        .status-btn span {
+            display: none; /* Hide the text by default */
+            margin-left: 8px; /* Space between icon and text */
+        }
+        .status-btn:hover span {
+            display: inline-block; /* Show text on hover */
+        }
+        .status-btn.in-process {
+            color: #ff9800; /* Orange color for in-process status */
+        }
+        .status-btn.closed {
+            color: #4caf50; /* Green color for closed status */
+        }
+        .status-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Category</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints_data %}
+                <tr>
+                    <td>{{ complaint[0] }}</td>
+                    <td>{{ complaint[1] }}</td>
+                    <td>{{ complaint[2] }}</td>
+                    <td>{{ complaint[3] }}</td>
+                    <td>{{ complaint[4] }}</td>
+                    <td>{{ complaint[5] }}</td>
+                    <td>
+                        <!-- Status Form -->
+                        {% if complaint[6] == 'new' %}
+                            <form action="{{ url_for('change_status') }}" method="POST" style="display:inline-block;">
+                                <input type="hidden" name="complaint_id" value="{{ complaint[0] }}">
+                                <button type="submit" class="status-btn closed" name="status" value="closed">
+                                    <i class="fa fa-check-circle"></i><span>Mark Closed</span>
+                                </button>
+                            </form>
+                            <form action="{{ url_for('change_status') }}" method="POST" style="display:inline-block;">
+                                <input type="hidden" name="complaint_id" value="{{ complaint[0] }}">
+                                <button type="submit" class="status-btn in-process" name="status" value="in-process">
+                                    <i class="fa fa-spinner"></i><span>Mark In-Process</span>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                    <td>{{ complaint[7] }}</td>
+                    <td>
+                        <form action="{{ url_for('remove_complaint') }}" method="POST" style="display:inline-block;">
+                            <input type="hidden" name="complaint_id" value="{{ complaint[0] }}">
+                            <button type="submit" class="remove-btn" title="Remove Complaint">
+                                &#x1F5D1; <!-- Trash icon -->
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

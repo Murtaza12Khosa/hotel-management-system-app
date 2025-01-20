@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Access</title>
+    <style>
+        /* General Styling */
+        /* General Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        /* Container for the table */
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            margin-top:-2%;
+            padding: 30px;
+            border-radius: 10px;
+                }
+        
+        /* Styling for the search bar */
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        #search {
+            padding: 10px;
+            font-size: 16px;
+            width: 250px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        #search:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 2px solid #ddd; /* Add border for the table */
+        }
+        
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border: 1px solid #ddd; /* Add border for table cells */
+            font-size: 14px;
+        }
+        
+        /* Header Styling */
+        th {
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Row Styling */
+        td {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-btn, .delete-btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* View Button Styling */
+        .view-btn {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .view-btn:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Delete Button Styling */
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .delete-btn:hover {
+            background-color: #e53935;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive Design for Mobile */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+        
+            table {
+                font-size: 12px;
+            }
+        
+            #search {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        
+            th, td {
+                padding: 10px 12px;
+            }
+        
+            .action-buttons {
+                justify-content: center;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search by User ID or Name">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Access Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td> <!-- User ID -->
+                    <td>{{ user[1] }}</td> <!-- Last Name -->
+                    <td>{{ user[2] }}</td> <!-- Email -->
+                    <td>{{ user[3] }}</td> <!-- Registration Date -->
+                    <td class="action-buttons">
+                        <a href="{{ url_for('view_user', user_id=user[0]) }}"><button class="view-btn">View</button></a>
+                        <a href="{{ url_for('delete_user', user_id=user[0]) }}"><button class="delete-btn">Delete</button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

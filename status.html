@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Complaints</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        .remove-btn {
+            border: none;
+            color: black;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 25px;
+        }
+        .remove-btn:hover {
+            background-color: #d32f2f;
+        }
+        .status-btn {
+            border: none;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .status-btn.in-process {
+            background-color: #ff9800;
+            color: white;
+        }
+        .status-btn.closed {
+            background-color: #4caf50;
+            color: white;
+        }
+        .status-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Category</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Submitted At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints_data %}
+                <tr>
+                    <td>{{ complaint[0] }}</td>
+                    <td>{{ complaint[1] }}</td>
+                    <td>{{ complaint[2] }}</td>
+                    <td>{{ complaint[3] }}</td>
+                    <td>{{ complaint[4] }}</td>
+                    <td>{{ complaint[5] }}</td>
+                    <td>
+                        <form action="{{ url_for('change_status') }}" method="POST" style="display:inline-block;">
+                            <input type="hidden" name="complaint_id" value="{{ complaint[0] }}">
+                            <input type="hidden" name="status" value="closed">
+                            <button type="submit" class="status-btn closed" title="Mark as Closed">
+                                Closed
+                            </button>
+                        </form>
+                        <form action="{{ url_for('change_status') }}" method="POST" style="display:inline-block;">
+                            <input type="hidden" name="complaint_id" value="{{ complaint[0] }}">
+                            <input type="hidden" name="status" value="in process">
+                            <button type="submit" class="status-btn in-process" title="Mark as In Process">
+                                In Process
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('remove_complaint') }}" method="POST" style="display:inline-block;">
+                            <input type="hidden" name="complaint_id" value="{{ complaint[0] }}">
+                            <button type="submit" class="remove-btn" title="Remove Complaint">
+                                &#x1F5D1; <!-- Trash icon -->
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

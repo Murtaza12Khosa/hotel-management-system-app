@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+    
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    
+        .title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+    
+        .course-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+    
+        .course-table th, .course-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        .course-table th {
+            background-color: #f2f2f2;
+        }
+    
+        .course-table tr:hover {
+            background-color: #f9f9f9;
+        }
+    
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+    
+        .edit-btn,
+        .delete-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+    
+        .edit-btn:hover {
+            background-color: #45a049;
+        }
+    
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+    
+        .delete-btn:hover {
+            background-color: #e53935;
+        }
+    
+        .delete-btn:active {
+            background-color: #d32f2f;
+        }
+    
+        /* Flash message styles */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+    
+        li.success {
+            color: green;
+        }
+    
+        li.danger {
+            color: red;
+        }
+    
+        li {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+        }
+    
+        li.success {
+            background-color: #d4edda;
+        }
+    
+        li.danger {
+            background-color: #f8d7da;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Manage Courses</h1>
+
+        <!-- Flash message display -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <table class="course-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Course Name</th>
+                    <th>Course Code</th>
+                    <th>Duration (Months)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="course-table-body">
+                {% for course in courses %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ course[1] }}</td> <!-- course_name -->
+                        <td>{{ course[2] }}</td> <!-- course_code -->
+                        <td>{{ course[3] }}</td> <!-- course_duration -->
+                        <td>
+                            <div class="actions">
+                                <button class="edit-btn" onclick="editCourse({{ course[0] }})">Edit</button>
+
+                                <!-- Hidden form for deleting the course -->
+                                <form id="delete-form-{{ course[0] }}" method="POST" action="/delete_course/{{ course[0] }}" style="display:inline;">
+                                    <!-- Using POST method directly in the form -->
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">No courses available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to edit course
+        function editCourse(courseId) {
+            alert(`Edit course with ID: ${courseId}`);
+            // Implement the edit functionality
+        }
+    </script>
+</body>
+</html>

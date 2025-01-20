@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 20px auto;
+            padding: 20px 30px;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        form {
+            display: block;
+            grid-template-columns: 1fr;
+        }
+
+        form h3 {
+            grid-column: span 2;
+            font-size: 20px;
+            color: #2575fc;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        form div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        form input,
+        form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        form textarea {
+            resize: none;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items:center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            width:40%;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #1e63d8;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="{{ url_for('user_profile') }}" method="POST">
+            <!-- First Name -->
+            <div>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+
+            <!-- Middle Name -->
+            <div>
+                <label for="middleName">Middle Name:</label>
+                <input type="text" id="middleName" name="middleName">
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+
+            <!-- Gender -->
+            <div>
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="">-- Select Gender --</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Contact Number -->
+            <div>
+                <label for="contactNumber">Contact Number:</label>
+                <input type="tel" id="contactNumber" name="contactNumber" pattern="[0-9]{10}" required placeholder="e.g., 9876543210">
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="button-container">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('userProfileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            const formData = new FormData(event.target);
+        
+            fetch('/user_profile', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to submit the profile.');
+            });
+        });
+    </script>
+</body>
+</html>

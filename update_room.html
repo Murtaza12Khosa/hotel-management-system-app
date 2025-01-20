@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Room</title>
+</head>
+<body>
+    <h1>Update Room</h1>
+    <form method="POST">
+        <label for="room_number">Room Number:</label>
+        <input type="text" name="room_number" value="{{ room[1] }}" disabled><br><br>
+
+        <label for="room_type">Room Type:</label>
+        <input type="text" name="room_type" value="{{ room[2] }}" required><br><br>
+
+        <label for="capacity">Capacity:</label>
+        <input type="number" name="capacity" value="{{ room[3] }}" required><br><br>
+
+        <label for="per_day">Per Day:</label>
+        <input type="number" name="per_day" value="{{ room[4] }}" required><br><br>
+
+        <label for="per_week">Per Week:</label>
+        <input type="number" name="per_week" value="{{ room[5] }}" required><br><br>
+
+        <label for="per_month">Per Month:</label>
+        <input type="number" name="per_month" value="{{ room[6] }}" required><br><br>
+
+        <label for="status">Status:</label>
+        <select name="status" required>
+            <option value="Available" {% if room[7] == 'Available' %}selected{% endif %}>Available</option>
+            <option value="Occupied" {% if room[7] == 'Occupied' %}selected{% endif %}>Occupied</option>
+        </select><br><br>
+
+        <button type="submit">Update Room</button>
+    </form>
+</body>
+</html>

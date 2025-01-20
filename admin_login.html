@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+    /* General container */
+    .container {
+        width: 80%;
+        max-width: 400px;
+        margin-left: 20%;
+        margin-bottom: 60%;
+        padding: 20px;
+        border-radius: 8px;
+    }
+    
+    /* Heading styles */
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    /* Form group styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    input[type="text"],
+    input[type="password"],
+    input[type="email"]
+     {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    
+    input[type="text"]:focus,
+    input[type="password"]:focus, 
+    input[type="email"]:focus 
+
+    {
+        outline-color: #007bff;
+    }
+    
+    /* Submit button styling */
+    .btn-submit {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Link styling */
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Flash messages */
+    .flash-messages {
+        margin-top: 20px;
+    }
+    
+    .success {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        border: 1px solid #c3e6cb;
+        border-radius: 4px;
+    }
+    
+    .danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+    }
+</style>
+    </head>
+<body>
+    <div class="container">
+        <h1>Admin Login</h1>
+        <form action="/admin_login.html" method="POST" class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="email" name="email" id ="username" placeholder="Enter Email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required placeholder="Enter your password">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn-submit">Login</button>
+            </div>
+
+            <div class="form-group">
+                <p>Forgot your password? <a href="/reset_password.html">Reset here</a></p>
+            </div>
+        </form>
+
+        <!-- Flash messages (display success or error messages) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

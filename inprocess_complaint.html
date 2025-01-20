@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-Process Complaints</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        table thead th {
+            text-align: left;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody td {
+            padding: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .action-buttons .view {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .action-buttons .view:hover {
+            background-color: #4cae4c;
+        }
+
+        .action-buttons .resolve {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .action-buttons .resolve:hover {
+            background-color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">In-Process Complaints</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Room Number</th>
+                    <th>Student Name</th>
+                    <th>Complaint Type</th>
+                    <th>Date Filed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in inprocess_complaint %}
+                <tr>
+                    <td>{{ complaint[0] }}</td>  <!-- Assuming complaint ID is the first element -->
+                    <td>{{ complaint[1] }}</td>  <!-- Adjust indices based on your database schema -->
+                    <td>{{ complaint[2] }}</td>
+                    <td>{{ complaint[3] }}</td>
+                    <td>{{ complaint[4] }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="view" onclick="window.location.href='{{ url_for('view_complaint', complaint_id=complaint[0]) }}'">View</button>
+                            <form action="{{ url_for('mark_resolved', complaint_id=complaint[0]) }}" method="POST" style="display:inline-block;">
+                                <button type="submit" class="resolve">Mark Resolved</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

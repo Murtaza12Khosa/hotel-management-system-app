@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View User</title>
+</head>
+<body>
+    <h1>User Details</h1>
+    <table>
+        <tr>
+            <th>User ID</th>
+            <td>{{ user[0] }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ user[1] }} {{ user[2] }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user[3] }}</td>
+        </tr>
+        <tr>
+            <th>Access Time</th>
+            <td>{{ user[4] }}</td>
+        </tr>
+    </table>
+    <a href="{{ url_for('user_access') }}">Back to User Access</a>
+</body>
+</html>

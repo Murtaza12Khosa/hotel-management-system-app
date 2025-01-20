@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Booking Form</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 20px auto;
+            padding: 20px 30px;
+            border-radius: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        form h4, form h3 {
+            grid-column: span 2;
+            font-size: 20px;
+            color: #2575fc;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        form div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        form input,
+        form select,
+        form textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        form textarea {
+            resize: none;
+        }
+
+        .radio-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .button-container {
+            grid-column: span 2;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            width:30%;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            align:center;
+
+        }
+
+        button:hover {
+            background: #1e63d8;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="hostelBookingForm" action="/book_hostel" method="POST">
+            <!-- Room Information -->
+            <h4>Room Related Info</h4>
+            <div>
+                <label for="room_no">Room No</label>
+                <input type="text" id="room_no" name="room_no" required oninput="calculateFees()">
+            </div>
+            <div>
+                <label for="seater">Seater</label>
+                <input type="number" id="seater" name="seater" min="1" required oninput="calculateFees()">
+            </div>
+            <div>
+                <label for="fees">Fees Per Month</label>
+                <input type="text" id="fees" name="fees" readonly>
+            </div>
+            <div class="full-width">
+                <label>Food Status</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="foodStatus" value="With Food" required onchange="calculateFees()"> With Food (2000 Per Month Extra)
+                    </label>
+                    <label>
+                        <input type="radio" name="foodStatus" value="Without Food" required onchange="calculateFees()"> Without Food
+                    </label>
+                </div>
+            </div>
+            <div>
+                <label for="stayfrom">Stay from</label>
+                <input type="date" id="stayfrom" name="stayfrom" required>
+            </div>
+            <div>
+                <label for="stayDuration">Duration of Stay (in months)</label>
+                <input type="number" id="stayDuration" name="stayDuration" min="1" required>
+            </div>
+
+            <!-- Personal Information -->
+            <h3>Personal Info</h3>
+            <div>
+                <label for="course">Choose a course:</label>
+                <select name="course" id="course" required>
+                    <option value="" disabled selected>Select a course</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Cybersecurity">Cybersecurity</option>
+                </select>
+            </div>
+            <div>
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div>
+                <label for="middelName">Middle Name</label>
+                <input type="text" id="middelName" name="middelName">
+            </div>
+            <div>
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div>
+                <label for="gender">Gender</label>
+                <select name="gender" id="gender" required>
+                    <option value="" disabled selected>Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="guardianName">Guardian Name</label>
+                <input type="text" id="guardianName" name="guardianName" required>
+            </div>
+            <div>
+                <label for="guardianRelation">Guardian Relation</label>
+                <input type="text" id="guardianRelation" name="guardianRelation" required>
+            </div>
+            <div>
+                <label for="guardianContactNo">Guardian Contact No</label>
+                <input type="text" id="guardianContactNo" name="guardianContactNo" required>
+            </div>
+
+            <!-- Address Information -->
+            <h3>Address Related</h3>
+            <div class="full-width">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+            <div>
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div>
+                <label for="state">State</label>
+                <select name="state" id="state" required>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Sindh">Sindh</option>
+                    <option value="KPK">Khyber Pakhtunkhwa (KPK)</option>
+                    <option value="Balochistan">Balochistan</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="button-container">
+                <button type="submit">Book Hostel</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function calculateFees() {
+            let roomNo = document.getElementById('room_no').value;
+            let seater = document.getElementById('seater').value;
+            let foodStatus = document.querySelector('input[name="foodStatus"]:checked')?.value;
+            let baseFee = 2500; // Base fee per month
+
+            // Calculate fees based on seater
+            if (seater) {
+                baseFee *= seater; // If seater is selected, multiply base fee by seater count
+            }
+
+            // Add food charge if "With Food" is selected
+            if (foodStatus === "With Food") {
+                baseFee += 2000; // Add 2000 if food is selected
+            }
+
+            // Update the fee field
+            document.getElementById('fees').value = baseFee;
+        }
+
+        // Add event listeners to trigger calculation when any field changes
+        document.getElementById('seater').addEventListener('input', calculateFees);
+        document.querySelectorAll('input[name="foodStatus"]').forEach(radio => {
+            radio.addEventListener('change', calculateFees);
+        });
+    </script>
+</body>
+</html>

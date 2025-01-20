@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 20px auto;
+            padding: 20px 30px;
+            border-radius: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #2575fc;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #1e63d8;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">        
+        <div class="title">My Complaints</div>
+        
+        <div class="table-container">
+            <table id="complaintsTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Sno.</th>
+                        <th>Complaint Number</th>
+                        <th>Complaint Type</th>
+                        <th>Complaint Status</th>
+                        <th>Complaint Reg. Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if complaints %}
+                        {% for complaint in complaints %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ complaint[0] }}</td> <!-- Complaint Number -->
+                                <td>{{ complaint[1] }}</td> <!-- Complaint Type -->
+                                <td>{{ complaint[2] }}</td> <!-- Status -->
+                                <td>{{ complaint[3] }}</td> <!-- Registration Date -->
+                                <td>
+                                    <button type="button">View</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center;">No complaints registered</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="button-container">
+            <button type="button" onclick="window.location.href='/complaint-form'">Register New Complaint</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#complaintsTable').DataTable({
+                "searching": true,
+                "paging": true,
+                "info": true
+            });
+        });
+    </script>
+</body>
+</html>

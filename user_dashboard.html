@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <!-- Include Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.5em;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Main container */
+        .main-container {
+            display: flex;
+            flex: 1;
+            margin-top: 60px; /* Adjust for header height */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 15%;
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            top: 60px; /* Adjust for header height */
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: block;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover {
+            background-color: #2c3e50;
+        }
+
+        /* Add styles for the horizontal line and Logout link */
+        .sidebar hr {
+            border: 0;
+            height: 2px;
+            background-color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        .sidebar #logout {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        .sidebar #logout:hover {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        /* Main content area */
+        .content-container {
+            flex: 1;
+            margin-left: 17%; /* Adjust for sidebar width */
+            display: flex;
+            padding: 20px;
+            margin-top:15%;
+        }
+
+        /* Two boxes */
+        .box {
+            flex: 1;
+            text-align: center;
+            margin: 10px;
+            height: 100px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Route content */
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: -80%;
+            background-color: white;
+            border-radius: 10px;
+            display: none; /* Hidden initially */
+        }
+
+        .route-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Hostel Management System
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <a href="/book_hostel" onclick="loadContent(event, 'book_hostel', 'Book Hostel')">
+                <i class="fas fa-bed"></i> Book Hostel
+            </a>
+            <a href="/room_detail.html" onclick="loadContent(event, 'room_detail', 'Room Detail')">
+                <i class="fas fa-door-open"></i> Room Detail
+            </a>
+            <a href="/complaint.html" onclick="loadContent(event, 'complaint', 'Complaint Registration')">
+                <i class="fas fa-exclamation-circle"></i> Complaint Registration
+            </a>
+            <a href="/registered_complaint.html" onclick="loadContent(event, 'registered_complaint', 'Registered Complaint')">
+                <i class="fas fa-clipboard-list"></i> Registered Complaint
+            </a>
+            <a href="/feedback.html" onclick="loadContent(event, 'feedback', 'Feedback')">
+                <i class="fas fa-comment-alt"></i> Feedback
+            </a>
+            <a href="/user_profile.html" onclick="loadContent(event, 'user_profile', 'My Profile')">
+                <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="/change_password.html" onclick="loadContent(event, 'change_password', 'Change Password')">
+                <i class="fas fa-key"></i> Change Password
+            </a>
+            <a href="/access_log" onclick="loadContent(event, 'access_log', 'Access Log')">
+                <i class="fas fa-sign-in-alt"></i> Access Log
+            </a>
+            
+
+            </a>
+
+            <!-- Horizontal line -->
+            <hr>
+
+            <!-- Logout link -->
+            <a href="/" onclick="handleLogout(event)" id="logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+
+        <div class="content-container">
+            <!-- Two boxes with different colors and links -->
+            <div id="box1" class="box" style="background-color: #3498db; color: white;">
+                <a href="/user_profile.html" onclick="loadContent(event, 'user_profile', 'My Profile')" style="color: white;">
+                    <h2>My Profile</h2>
+                </a>
+            </div>
+            <div id="box2" class="box" style="background-color: #e74c3c; color: white;">
+                <a href="/room_detail.html" onclick="loadContent(event, 'room_detail', 'Room Detail')" style="color: white;">
+                    <h2>Room Details</h2>
+                </a>
+            </div>
+        </div>
+
+        <!-- Content area -->
+        <div id="content" class="content">
+            <div id="route-name" class="route-name">Welcome</div>
+            <p>Please select an option from the sidebar to view content.</p>
+        </div>
+    </div>
+    <script>
+        /**
+         * Dynamically load content and toggle visibility of boxes and content area.
+         * @param {Event} event - The click event.
+         * @param {string} route - The route to load.
+         * @param {string} routeName - The name to display as the route name.
+         */
+        function loadContent(event, route, routeName) {
+            event.preventDefault(); // Prevent default anchor behavior
+    
+            // Hide the boxes
+            document.getElementById('box1').style.display = 'none';
+            document.getElementById('box2').style.display = 'none';
+    
+            // Show the content area
+            const content = document.getElementById('content');
+            content.style.display = 'block';
+    
+            // Update the route name in the content
+            document.getElementById('route-name').textContent = routeName;
+    
+            // Update the browser's URL without refreshing the page
+            const newUrl = `/${route}`;
+            history.pushState({ route: newUrl }, routeName, newUrl);
+    
+            // Fetch the content from the provided route
+            fetch(newUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error fetching ${newUrl}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Inject the fetched content into the #content div
+                    content.innerHTML = `
+                        <div id="route-name" class="route-name">${routeName}</div>
+                        ${data}
+                    `;
+                })
+                .catch(error => {
+                    content.innerHTML = `
+                        <h2>Error</h2>
+                        <p>Failed to load content. Please try again later.</p>
+                        <p>${error.message}</p>
+                    `;
+                });
+        }
+    
+        // Handle back/forward navigation
+        window.onpopstate = function (event) {
+            if (event.state && event.state.route) {
+                const routeName = event.state.route.split('/').pop().replace('_', ' ');
+                loadContent(event, event.state.route, routeName);
+            }
+        };
+    
+        // Logout function
+        function handleLogout(event) {
+            event.preventDefault(); // Prevent the default anchor behavior
+            // Perform logout actions here (clear session, etc.)
+            alert('You have been logged out');
+            // Redirect to the homepage or login page after logging out
+            window.location.href = '/'; 
+        }
+    </script>
+    
+</body>
+</html>

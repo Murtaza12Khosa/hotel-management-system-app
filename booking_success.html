@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .message-box {
+            background-color: #2ecc71;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .message-box h1 {
+            margin: 0;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .button-container a {
+            padding: 10px 20px;
+            background-color: #34495e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button-container a:hover {
+            background-color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="message-box">
+        <h1>Booking Successful!</h1>
+        <p>Your booking for Room <span id="roomNumber"></span> was successful. Thank you for your submission.</p>
+        <div class="button-container">
+            <a href="/user_dashboard.html">Go to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Get room number from query parameters
+        const params = new URLSearchParams(window.location.search);
+        const roomNumber = params.get('room');
+        document.getElementById('roomNumber').textContent = roomNumber;
+    </script>
+
+</body>
+</html>

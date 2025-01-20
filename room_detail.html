@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Details</title>
+    <style>
+        /* Your existing styles here */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 90%;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 3px;
+            margin-top: -30%;
+            text-transform: uppercase;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #2575fc;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e0e0e0;
+        }
+        .book-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .book-btn:hover {
+            background-color: #2ecc71;
+        }
+        .status {
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+            display: inline-block;
+        }
+        .available {
+            background-color: #27ae60;
+            color: white;
+        }
+        .occupied {
+            background-color: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Room Details</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Room Type</th>
+                    <th>Capacity</th>
+                    <th>Per Day</th>
+                    <th>Per Week</th>
+                    <th>Per Month</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="roomTable">
+                {% for room in rooms %}
+                <tr>
+                    <td>{{ room[1] }}</td>
+                    <td>{{ room[2] }}</td>
+                    <td>{{ room[3] }}</td>
+                    <td>${{ room[4] }}</td>
+                    <td>${{ room[5] }}</td>
+                    <td>${{ room[6] }}</td>
+                    <td>
+                        <span class="status {{ 'available' if room[7] == 'Available' else 'occupied' }}" id="status-{{ room[1] }}">
+                            {{ room[7] }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if room[7] == 'Available' %}
+                        <button class="book-btn" id="book-btn-{{ room[1] }}" onclick="bookRoom({{ room[1] }})">
+                            Book Now
+                        </button>                        
+                        {% else %}
+                        <button class="book-btn" disabled>
+                            Already Booked
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function bookRoom(roomNumber) {
+            const buttonElement = document.getElementById(`book-btn-${roomNumber}`);
+            buttonElement.textContent = 'Booking...';
+            buttonElement.disabled = true;
+    
+            fetch('/book_room', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ room_number: roomNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const statusElement = document.getElementById(`status-${roomNumber}`);
+                    statusElement.textContent = 'Occupied';
+                    statusElement.classList.remove('available');
+                    statusElement.classList.add('occupied');
+    
+                    buttonElement.textContent = 'Already Booked';
+                } else {
+                    alert(data.message);
+                    buttonElement.textContent = 'Book Now';
+                    buttonElement.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                buttonElement.textContent = 'Book Now';
+                buttonElement.disabled = false;
+            });
+        }
+    </script>
+    
+</body>
+</html>

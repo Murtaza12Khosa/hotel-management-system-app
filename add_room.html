@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Room</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        form div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        form input, form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        form input:focus, form select:focus {
+            border-color: #2575fc;
+            outline: none;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items:center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #1e63d8;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="add-room-form">
+            <!-- Room Number -->
+            <div>
+                <label for="room-number">Room Number</label>
+                <input type="text" id="room-number" name="room_number" placeholder="Enter room number" required>
+            </div>
+
+            <!-- Room Type -->
+            <div>
+                <label for="room-type">Room Type</label>
+                <select id="room-type" name="room_type" required>
+                    <option value="" disabled selected>Select room type</option>
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Triple">Triple</option>
+                    <option value="Suite">Suite</option>
+                </select>
+            </div>
+
+            <!-- Capacity -->
+            <div>
+                <label for="capacity">Capacity (Number of Beds)</label>
+                <input type="number" id="capacity" name="capacity" placeholder="Enter number of beds" required>
+            </div>
+
+            <!-- Price per Day -->
+            <div>
+                <label for="per-day">Price per Day</label>
+                <input type="number" id="per-day" name="per_day" placeholder="Enter price per day" required>
+            </div>
+
+            <!-- Price per Week -->
+            <div>
+                <label for="per-week">Price per Week</label>
+                <input type="number" id="per-week" name="per_week" placeholder="Enter price per week" required>
+            </div>
+
+            <!-- Price per Month -->
+            <div>
+                <label for="per-month">Price per Month</label>
+                <input type="number" id="per-month" name="per_month" placeholder="Enter price per month" required>
+            </div>
+
+            <!-- Room Status -->
+            <div>
+                <label for="status">Room Status</label>
+                <select id="status" name="status" required>
+                    <option value="" disabled selected>Select status</option>
+                    <option value="Available">Available</option>
+                    <option value="Occupied">Occupied</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="button-container">
+                <button type="submit">Add Room</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('add-room-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Collect the form data
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Send the form data to the Flask server using fetch
+            fetch('/add-room', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),  // Send the data as JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show a pop-up message
+                    alert(data.message);
+                    // Optionally, redirect or update the page after success
+                    // window.location.href = "/room-detail";  // Redirect to room details page
+                } else {
+                    // Show an error message if something went wrong
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management Sidebar</title>
+    <!-- Add Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-...YOUR-INTEGRITY-HASH..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.5em;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Main container */
+        .main-container {
+            display: flex;
+            flex: 1;
+            margin-top: 60px; /* Adjust for header height */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 15%;
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            top: 60px; /* Adjust for header height */
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #17a2b8;
+            text-decoration:none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .sidebar a i {
+            font-size: 18px;
+        }
+
+        .sidebar a:hover {
+            color: white;
+            background-color:rgb(47, 154, 170);
+        }
+
+        /* Main content area */
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: #ecf0f1;
+            overflow-y: auto;
+            margin-left: 17%; /* Adjust for sidebar width */
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        Hostel Management System
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <a href="registration.html" onclick="loadContent(event, 'registration.html')">
+                <i class="fas fa-user-plus"></i> Registration
+            </a>
+            <a href="/user_login" onclick="loadContent(event, '/user_login')">
+                <i class="fas fa-sign-in-alt"></i> User Login
+            </a>
+            
+            </a>
+            <a href="admin_login.html" onclick="loadContent(event, 'admin_login.html')">
+                <i class="fas fa-user-shield"></i> Admin Login
+            </a>
+        </div>
+
+        <div id="content" class="content">
+            <h2>Welcome</h2>
+            <p>Please select an option from the sidebar to view content.</p>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Dynamically load content into the content container.
+         * @param {Event} event - The click event.
+         * @param {string} url - The URL of the content to load.
+         */
+        function loadContent(event, url) {
+            event.preventDefault(); // Prevent default anchor behavior
+            // Fetch the content from the provided URL
+            console.log("login url",url)
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error fetching ${url}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(response => {
+                    // Inject the fetched content into the #content div
+                    document.getElementById('content').innerHTML = response;
+                })
+                .catch(error => {
+                    document.getElementById('content').innerHTML = `
+                        <h2>Error</h2>
+                        <p>Failed to load content. Please try again later.</p>
+                        <p>${error.message}</p>
+                    `;
+                });
+        }
+    </script>
+</body>
+</html>

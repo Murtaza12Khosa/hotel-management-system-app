@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Feedback</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 20px auto;
+            padding: 20px 30px;
+            border-radius: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 8px 12px;
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #1e63d8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #ddd; /* Add border for table cells */
+
+        }
+
+        table thead {
+            color: black;
+        }
+
+        table thead th {
+            padding: 10px;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody td {
+            padding: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .remove-btn {
+            color: #e74c3c;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Search Form -->
+        <div class="search-container">
+            <form action="/view_feedback" method="GET">
+                <input type="email" name="email" placeholder="Search by user email" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Feedback Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Feedback ID</th>
+                    <th>Feedback Type</th>
+                    <th>Feedback Message</th>
+                    <th>Email</th>
+                    <th>Date Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedback_data %}
+                    <tr>
+                        <td>{{ feedback[0] }}</td> <!-- Feedback ID -->
+                        <td>{{ feedback[1] }}</td> <!-- Feedback Type -->
+                        <td>{{ feedback[2] }}</td> <!-- Feedback Message -->
+                        <td>{{ feedback[3] }}</td> <!-- Email -->
+                        <td>{{ feedback[4] }}</td> <!-- Date Submitted -->
+                        <td>
+                            <!-- Remove Button -->
+                            <form action="/remove_feedback" method="POST" style="display:inline-block;">
+                                <input type="hidden" name="feedback_id" value="{{ feedback[0] }}">
+                                <button type="submit" class="remove-btn" title="Remove Feedback">
+                                    &#x1F5D1; <!-- Trash icon -->
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

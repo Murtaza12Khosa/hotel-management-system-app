@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        table th {
+            background-color: #3498db;
+            color: #fff;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .button-container {
+            text-align: center;
+        }
+        button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sno.</th>
+                    <th>Last Name</th>
+                    <th>Registration Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if access_logs %}
+                    {% for log in access_logs %}
+                        <tr>
+                            <td>{{ loop.index }}</td> <!-- Sno. -->
+                            <td>{{ log[1] }}</td> <!-- Last Name (username) -->
+                            <td>{{ log[2] }}</td> <!-- Registration Date -->
+                            <td>
+                                <button onclick="deleteLog({{ log[0] }})">Delete</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">No logs available</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <div class="button-container">
+            <button onclick="clearLog()">Clear All Logs</button>
+        </div>
+    </div>
+    <script>
+        // Clear all logs
+        async function clearLog() {
+            if (confirm('Are you sure you want to clear all logs?')) {
+                try {
+                    const response = await fetch('/clear_access_log', { method: 'POST' });
+                    if (response.ok) {
+                        alert('All logs cleared successfully.');
+                        location.reload(); // Reload the page after successful deletion
+                    } else {
+                        // Log the error message from the server if response.ok is false
+                        const errorData = await response.json();
+                        alert('Failed to clear logs: ' + errorData.message);
+                    }
+                } catch (error) {
+                    alert('Error clearing logs: ' + error.message);
+                    console.error('Clear Log Error:', error); // Log the error for debugging
+                }
+            }
+        }
+    
+        // Delete a specific log
+        async function deleteLog(id) {
+            if (confirm(`Are you sure you want to delete log ID ${id}?`)) {
+                try {
+                    const response = await fetch(`/delete_access_log/${id}`, { method: 'POST' });
+                    if (response.ok) {
+                        alert('Log deleted successfully.');
+                        location.reload(); // Reload the page after deletion
+                    } else {
+                        // Log the error message from the server if response.ok is false
+                        const errorData = await response.json();
+                        alert('Failed to delete log: ' + errorData.message);
+                    }
+                } catch (error) {
+                    alert('Error deleting log: ' + error.message);
+                    console.error('Delete Log Error:', error); // Log the error for debugging
+                }
+            }
+        }
+    </script>
+    
+</body>
+</html>
